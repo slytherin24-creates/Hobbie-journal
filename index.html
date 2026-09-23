@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eadcf5">
+<title>Mi Seguimiento</title>
+<style>
+:root{--bg:#faf8fc;--card:#fff;--text:#302b35;--muted:#756d7b;--a:#9b7bb5;--a2:#eadcf5;--line:#e8e0eb;--danger:#c96b78;--ok:#6f9b7b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}header{padding:22px 16px 12px;position:sticky;top:0;z-index:5;background:#faf8fcf2;backdrop-filter:blur(12px)}
+h1{margin:0;font-size:27px}.sub{color:var(--muted);font-size:14px;margin-top:3px}
+nav{display:flex;gap:8px;overflow:auto;padding:0 14px 14px}.tab{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 15px;white-space:nowrap;color:var(--text)}.tab.on{background:var(--a);color:#fff;border-color:var(--a)}
+main{max-width:980px;margin:auto;padding:0 14px 50px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.search{flex:1;min-width:190px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--card)}.btn{border:0;border-radius:12px;padding:11px 15px}.primary{background:var(--a);color:#fff}.secondary{background:var(--a2);color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:15px}.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}.stat b{font-size:20px;display:block}.stat small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden}.cover{height:245px;background:var(--a2);display:flex;align-items:center;justify-content:center;font-size:50px;color:var(--muted);overflow:hidden}.cover img{width:100%;height:100%;object-fit:cover}.body{padding:14px}.title{font-weight:750;font-size:17px}.meta{font-size:13px;color:var(--muted);margin-top:4px}.badge{display:inline-block;background:var(--a2);border-radius:99px;padding:5px 8px;font-size:12px;margin:8px 4px 0 0}.actions{display:flex;gap:7px;margin-top:12px}.actions button{flex:1;border:0;border-radius:10px;padding:8px;background:#f3eff5}.actions .del{color:var(--danger)}.empty{text-align:center;color:var(--muted);padding:45px 15px;border:1px dashed var(--line);border-radius:16px;background:var(--card)}
+.overlay{display:none;position:fixed;inset:0;background:#0006;z-index:20;align-items:flex-end;justify-content:center}.overlay.open{display:flex}.sheet{background:var(--card);width:min(760px,100%);max-height:94vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px}.sheet h2{margin:0 0 15px}.form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{display:flex;flex-direction:column;gap:5px}.full{grid-column:1/-1}.field label{font-size:13px;color:var(--muted)}.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--text)}.modalBtns{display:flex;gap:8px;margin-top:16px}.modalBtns button{flex:1;border:0;border-radius:11px;padding:11px}
+.section{font-weight:700;margin:17px 0 7px}.season{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}.seasonHead{display:flex;justify-content:space-between;align-items:center;font-weight:700}.episode{display:grid;grid-template-columns:auto 1fr 100px 34px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.episode:first-of-type{margin-top:7px}.episode input[type=number]{width:100%;padding:5px;border:1px solid var(--line);border-radius:7px}.mini{border:0;background:var(--a2);border-radius:8px;padding:6px}.dangerBox{border:1px solid #e9c9cf;background:#fff7f8;padding:12px;border-radius:12px;margin-top:18px}.notice{font-size:12px;color:var(--muted);margin-top:10px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#302b35;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:40}.toast.show{display:block}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}.form{grid-template-columns:1fr}.full{grid-column:auto}.cover{height:220px}.episode{grid-template-columns:auto 1fr 82px 32px}}
+</style>
+
+<style id="themeStyles">
+:root{--bg:#faf8fc;--card:#fff;--text:#302b35;--muted:#756d7b;--a:#9b7bb5;--a2:#eadcf5;--line:#e8e0eb;--danger:#c96b78;--ok:#6f9b7b}
+body.theme-rosa{--bg:#fff8fb;--card:#fff;--text:#3a2d34;--muted:#806b75;--a:#d98fa8;--a2:#f7dce7;--line:#efdce3}
+body.theme-azul{--bg:#f6faff;--card:#fff;--text:#29333f;--muted:#697887;--a:#7fa9cf;--a2:#dcecf9;--line:#dce7f0}
+body.theme-verde{--bg:#f7fcf8;--card:#fff;--text:#2d3830;--muted:#6d7c72;--a:#86ad91;--a2:#dfeee3;--line:#dce9df}
+body.theme-amarillo{--bg:#fffdf5;--card:#fff;--text:#3d3829;--muted:#81795f;--a:#d5b56e;--a2:#f7eccb;--line:#eee4c9}
+body.theme-lila{--bg:#faf8ff;--card:#fff;--text:#332d3d;--muted:#746b80;--a:#a58bc9;--a2:#e9def8;--line:#e7def0}
+body.theme-oscuro{--bg:#19171c;--card:#242127;--text:#f1edf4;--muted:#b9b0bf;--a:#b99bd1;--a2:#3b3044;--line:#3c3542}
+body.theme-navidad{--bg:#fbf7f4;--card:#fff;--text:#332b29;--muted:#796c68;--a:#9b4f58;--a2:#f0dfe0;--line:#eadada}
+body.theme-otono{--bg:#fff9f3;--card:#fff;--text:#3c3029;--muted:#7e6d61;--a:#bd805c;--a2:#f1dfd1;--line:#eadbd0}
+body.theme-primavera{--bg:#f8fcf7;--card:#fff;--text:#303830;--muted:#718070;--a:#8eb58f;--a2:#e0f0df;--line:#dce9db}
+body.theme-verano{--bg:#f4fbff;--card:#fff;--text:#29363b;--muted:#6c7b80;--a:#72b5c5;--a2:#d9f0f4;--line:#d9e9ed}
+.themePanel{display:none;position:fixed;inset:0;background:#0006;z-index:50;align-items:flex-end;justify-content:center}.themePanel.open{display:flex}
+.themeSheet{width:min(720px,100%);background:var(--card);color:var(--text);border-radius:22px 22px 0 0;padding:20px;max-height:90vh;overflow:auto}
+.themeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.themeChoice{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--text);text-align:left}.themeChoice b{display:block}.themeChoice span{font-size:12px;color:var(--muted)}.themeClose{width:100%;margin-top:12px;padding:11px;border:0;border-radius:11px;background:var(--a2);color:var(--text)}
+@media(max-width:450px){.themeGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>Mi Seguimiento</h1><div class="sub">Series · Películas · Libros</div></header>
+<nav>
+<button class="tab on" data-tab="series">📺 Series</button><button class="tab" data-tab="peliculas">🎬 Películas</button><button class="tab" data-tab="libros">📚 Libros</button>
+</nav>
+<main>
+<div class="toolbar"><input id="search" class="search" placeholder="Buscar por título, grupo o plataforma…"><button class="btn primary" id="add">＋ Añadir</button><button class="btn secondary" id="backup">💾 Copia</button><button class="btn secondary" id="restore">↩ Restaurar</button><button class="btn secondary" id="themes">🎨 Tema</button><input id="file" type="file" accept=".json" hidden></div>
+<div class="stats" id="stats"></div><div id="list" class="grid"></div>
+</main>
+
+<div class="overlay" id="modal"><div class="sheet">
+<h2 id="mtitle">Añadir</h2>
+<form id="form">
+<div class="form">
+<div class="field full"><label>Título *</label><input id="title" required></div>
+<div class="field"><label>Portada (URL, opcional)</label><input id="cover" type="url"></div>
+<div class="field"><label>Estado</label><select id="status"><option value="pendiente">Pendiente</option><option value="en curso">En curso</option><option value="visto">Visto</option></select></div>
+<div class="field"><label>Plataforma / lugar</label><input id="platform" placeholder="Netflix, Disney+, físico…"></div>
+<div class="field"><label>Grupo personalizado</label><input id="group" placeholder="Ej.: favoritos"></div>
+<div class="field full"><label>Notas</label><textarea id="notes" rows="3"></textarea></div>
+<div id="seriesOptions" class="field full"><label>Temporadas</label><input id="seasonCount" type="number" min="1" value="1"></div>
+</div>
+<div id="episodes"></div>
+<div class="modalBtns"><button type="button" class="secondary" id="cancel">Cancelar</button><button class="primary" type="submit">Guardar</button></div>
+</form>
+</div></div>
+
+<div class="themePanel" id="themePanel">
+ <div class="themeSheet">
+  <h2 style="margin-top:0">🎨 Personalizar tema</h2>
+  <p style="color:var(--muted);font-size:13px">Puedes elegir un color pastel o una temática de temporada. Tu elección se guarda en este dispositivo.</p>
+  <div class="section">Colores pastel</div>
+  <div class="themeGrid">
+   <button class="themeChoice" data-theme="rosa"><b>🌸 Rosa pastel</b><span>Suave y rosado</span></button>
+   <button class="themeChoice" data-theme="azul"><b>🩵 Azul pastel</b><span>Claro y tranquilo</span></button>
+   <button class="themeChoice" data-theme="verde"><b>🌿 Verde pastel</b><span>Natural y suave</span></button>
+   <button class="themeChoice" data-theme="amarillo"><b>🌼 Amarillo pastel</b><span>Cálido y luminoso</span></button>
+   <button class="themeChoice" data-theme="lila"><b>💜 Lila pastel</b><span>Lavanda suave</span></button>
+   <button class="themeChoice" data-theme="oscuro"><b>🌙 Oscuro</b><span>Para usar con poca luz</span></button>
+  </div>
+  <div class="section">Temporadas del año</div>
+  <div class="themeGrid">
+   <button class="themeChoice" data-theme="navidad"><b>🎄 Navidad</b><span>Ambiente navideño</span></button>
+   <button class="themeChoice" data-theme="otono"><b>🍂 Otoño</b><span>Colores cálidos</span></button>
+   <button class="themeChoice" data-theme="primavera"><b>🌷 Primavera</b><span>Suave y floral</span></button>
+   <button class="themeChoice" data-theme="verano"><b>☀️ Verano</b><span>Claro y fresco</span></button>
+  </div>
+  <button class="themeClose" id="closeThemes">Cerrar</button>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB="MiSeguimientoDB", STORE="items", VERSION=1;
+let db, tab="series", editId=null, oldSeasons=[];
+const $=x=>document.getElementById(x);
+const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,VERSION);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE)){const s=r.result.createObjectStore(STORE,{keyPath:"id"});s.createIndex("type","type")}};r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)})}
+function tx(mode){return db.transaction(STORE,mode).objectStore(STORE)}
+function all(){return new Promise((res,rej)=>{const r=tx("readonly").getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function put(x){return new Promise((res,rej)=>{const r=tx("readwrite").put(x);r.onsuccess=res;r.onerror=()=>rej(r.error)})}
+function remove(id){return new Promise((res,rej)=>{const r=tx("readwrite").delete(id);r.onsuccess=res;r.onerror=()=>rej(r.error)})}
+async function persist(){try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(e){}}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function statusLabel(s){return s==="en curso"?"En curso":s.charAt(0).toUpperCase()+s.slice(1)}
+async function render(){
+ const q=$("search").value.toLowerCase().trim(), allItems=await all(), arr=allItems.filter(x=>x.type===tab&&(`${x.title} ${x.group||""} ${x.platform||""}`).toLowerCase().includes(q));
+ $("stats").innerHTML=`<div class="stat"><b>${allItems.filter(x=>x.type===tab).length}</b><small>Total</small></div><div class="stat"><b>${allItems.filter(x=>x.type===tab&&x.status==="pendiente").length}</b><small>Pendientes</small></div><div class="stat"><b>${allItems.filter(x=>x.type===tab&&x.status==="en curso").length}</b><small>En curso</small></div><div class="stat"><b>${allItems.filter(x=>x.type===tab&&x.status==="visto").length}</b><small>Vistos</small></div>`;
+ $("list").innerHTML=arr.length?arr.map(card).join(""):`<div class="empty" style="grid-column:1/-1">No hay elementos aquí todavía.<br>Añade el primero con <b>＋ Añadir</b>.</div>`;
+}
+function card(x){
+ const icon=tab==="series"?"📺":tab==="peliculas"?"🎬":"📚";let extra="";
+ if(tab==="series"){let eps=(x.seasons||[]).flatMap(s=>s.episodes||[]),done=eps.filter(e=>e.watched).length;extra=`<div class="meta">${x.seasons?.length||0} temporada(s) · ${done}/${eps.length} episodios vistos</div>`}
+ return `<article class="card"><div class="cover">${x.cover?`<img src="${esc(x.cover)}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'">`:icon}</div><div class="body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.platform||"")}</div><span class="badge">${statusLabel(x.status)}</span>${x.group?`<span class="badge">${esc(x.group)}</span>`:""}${extra}<div class="actions"><button onclick="edit('${x.id}')">Editar</button><button class="del" onclick="del('${x.id}')">Eliminar</button></div></div></article>`
+}
+async function openForm(item=null){
+ editId=item?.id||null;oldSeasons=item?.seasons||[];$("mtitle").textContent=item?"Editar":"Añadir";
+ $("title").value=item?.title||"";$("cover").value=item?.cover||"";$("status").value=item?.status||"pendiente";$("platform").value=item?.platform||"";$("group").value=item?.group||"";$("notes").value=item?.notes||"";
+ $("seriesOptions").style.display=tab==="series"?"flex":"none";$("seasonCount").value=item?.seasons?.length||1;buildEpisodes(oldSeasons);$("modal").classList.add("open");
+}
+function buildEpisodes(existing){
+ if(tab!=="series"){$("episodes").innerHTML="";return}
+ let n=Math.max(1,+$("seasonCount").value||1), html='<div class="section">Episodios</div>';
+ for(let s=0;s<n;s++){let es=existing[s]?.episodes||[];html+=`<div class="season"><div class="seasonHead"><span>Temporada ${s+1}</span><button type="button" class="mini" onclick="addEp(${s})">＋ episodio</button></div>`;
+ let count=Math.max(es.length,1);for(let e=0;e<count;e++){let ep=es[e]||{};html+=`<div class="episode"><input type="checkbox" data-s="${s}" data-e="${e}" ${ep.watched?"checked":""}><div>Episodio ${e+1}<br><small style="color:var(--muted)">Minuto guardado</small></div><input type="number" min="0" value="${ep.minute||0}" data-m="${s}-${e}"><button type="button" class="mini" onclick="removeEp(${s},${e})">×</button></div>`}html+="</div>"}
+ $("episodes").innerHTML=html;
+}
+window.addEp=(s)=>{let clone=JSON.parse(JSON.stringify(oldSeasons||[]));while(clone.length<Math.max(1,+$("seasonCount").value))clone.push({episodes:[]});clone[s]??={episodes:[]};clone[s].episodes??=[];clone[s].episodes.push({watched:false,minute:0});oldSeasons=clone;buildEpisodes(clone)}
+window.removeEp=(s,e)=>{let clone=JSON.parse(JSON.stringify(oldSeasons||[]));if(clone[s]?.episodes?.length>1)clone[s].episodes.splice(e,1);oldSeasons=clone;buildEpisodes(clone)}
+$("seasonCount").oninput=()=>{oldSeasons=[];buildEpisodes([])};
+$("add").onclick=()=>openForm();$("cancel").onclick=()=>$("modal").classList.remove("open");$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("open")};$("search").oninput=render;
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));b.classList.add("on");tab=b.dataset.tab;render()});
+$("form").onsubmit=async e=>{e.preventDefault();let x={id:editId||uid(),type:tab,title:$("title").value.trim(),cover:$("cover").value.trim(),status:$("status").value,platform:$("platform").value.trim(),group:$("group").value.trim(),notes:$("notes").value.trim(),updatedAt:new Date().toISOString()};
+ if(tab==="series"){let n=Math.max(1,+$("seasonCount").value||1);x.seasons=[];for(let s=0;s<n;s++){let boxes=[...document.querySelectorAll(`input[data-s="${s}"]`)],eps=boxes.map((b,i)=>({watched:b.checked,minute:+(document.querySelector(`input[data-m="${s}-${i}"]`)?.value||0)}));x.seasons.push({episodes:eps})}}
+ await put(x);await persist();$("modal").classList.remove("open");toast("Guardado ✓");render()};
+window.edit=async id=>openForm((await all()).find(x=>x.id===id));
+window.del=async id=>{if(confirm("¿Eliminar este elemento? Esta acción no se puede deshacer.")){await remove(id);toast("Eliminado");render()}};
+$("backup").onclick=async()=>{let payload={app:"Mi Seguimiento",version:2,createdAt:new Date().toISOString(),items:await all()};let blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mi-seguimiento-copia.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Copia creada ✓")};
+$("restore").onclick=()=>$("file").click();
+$("file").onchange=async()=>{let f=$("file").files[0];if(!f)return;try{let obj=JSON.parse(await f.text()),items=Array.isArray(obj)?obj:obj.items;if(!Array.isArray(items))throw 0;if(!confirm("Esto añadirá los datos de la copia a los actuales. ¿Continuar?"))return;for(const x of items){if(x.id)await put(x)}await persist();toast("Datos restaurados ✓");render()}catch(e){alert("No se pudo leer la copia.")}$("file").value=""};
+
+const THEME_KEY="MiSeguimientoTema";
+function applyTheme(t){
+ document.body.className=t==="base"?"":("theme-"+t);
+ localStorage.setItem(THEME_KEY,t);
+}
+const savedTheme=localStorage.getItem(THEME_KEY)||"base";
+applyTheme(savedTheme);
+$("themes").onclick=()=>$("themePanel").classList.add("open");
+$("closeThemes").onclick=()=>$("themePanel").classList.remove("open");
+$("themePanel").onclick=e=>{if(e.target===$("themePanel"))$("themePanel").classList.remove("open")};
+document.querySelectorAll(".themeChoice").forEach(b=>b.onclick=()=>{applyTheme(b.dataset.theme);toast("Tema guardado ✓")});
+
+(async()=>{await openDB();await persist();render()})();
+</script>
+</body>
+</html>
